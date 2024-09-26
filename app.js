@@ -91,7 +91,7 @@ function eliminarTarea(tareaId) {
     .catch(error => console.error('Error:', error));
 }
 
-// Actualizar una tarea (opcional, aquí podría haber una implementación para editar una tarea)
+// Actualizar una tarea
 function actualizarTarea(tareaId) {
     const nombreTarea = prompt('Ingrese el nuevo nombre de la tarea:');
     const descripcionTarea = prompt('Ingrese la nueva descripción de la tarea:');
