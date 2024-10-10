@@ -1,7 +1,7 @@
 const apiUrl = 'https://apptareas-f5gxfjabgwfxe2ed.canadacentral-01.azurewebsites.net/tareas';
 let currentTareaId = null;
 
-// Obtener todas las tareas cuando cargue la página
+// Obtener todas las tareas cuando cargue la pagina
 document.addEventListener('DOMContentLoaded', async () => {
     await cargarTareas();
 
