@@ -1,7 +1,7 @@
-const apiUrl = 'http://localhost:8080/tareas';
+const apiUrl = 'https://apptareas-f5gxfjabgwfxe2ed.canadacentral-01.azurewebsites.net/tareas';
 let currentTareaId = null;
 
-// Obtener todas las tareas cuando cargue la página
+// Obtener todas las tareas cuando cargue la pagina
 document.addEventListener('DOMContentLoaded', async () => {
     await cargarTareas();
 
@@ -88,7 +88,7 @@ async function crearTarea(tarea) {
 // Cambiar estado de una tarea
 async function cambiarEstado(tareaId) {
     try {
-        const response = await fetch(`${apiUrl}/cambio/${tareaId}`, { method: 'GET' });
+        const response = await fetch(`${apiUrl}/cambio/${tareaId}`, { method: 'PUT' });
         if (!response.ok) throw new Error('Error al cambiar estado');
         await cargarTareas();
     } catch (error) {
@@ -115,33 +115,26 @@ function prepararActualizacion(tareaId, nombre, descripcion) {
     document.getElementById('updateForm').style.display = 'block';
 }
 
-// Ocultar formulario de actualización
-function ocultarFormulario() {
-    document.getElementById('updateForm').style.display = 'none';
-    currentTareaId = null;
-}
+// Actualizar una tarea
+function actualizarTarea(tareaId) {
+    const nombreTarea = prompt('Ingrese el nuevo nombre de la tarea:');
+    const descripcionTarea = prompt('Ingrese la nueva descripción de la tarea:');
 
-// Actualizar tarea
-async function actualizarTarea(tareaId) {
-    const taskName = document.getElementById('updateTaskName').value;
-    const taskDescription = document.getElementById('updateTaskDescription').value;
+    if (nombreTarea && descripcionTarea) {
+        const tareaActualizada = {
+            nombre: nombreTarea,
+            descripcion: descripcionTarea,
+            estado: false
+        };
 
-    if (taskName && taskDescription) {
-        const tareaActualizada = { nombre: taskName, descripcion: taskDescription, estado: false };
-
-        try {
-            const response = await fetch(`${apiUrl}/${tareaId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(tareaActualizada)
-            });
-            if (!response.ok) throw new Error('Error al actualizar tarea');
-            await cargarTareas();
-            ocultarFormulario();
-        } catch (error) {
-            console.error('Error al actualizar tarea:', error);
-        }
-    } else {
-        alert('Por favor, completa ambos campos.');
+        fetch(`${apiUrl}/${tareaId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tareaActualizada)
+        })
+        .then(() => getTareas())
+        .catch(error => console.error('Error:', error));
     }
 }
