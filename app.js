@@ -88,7 +88,7 @@ async function crearTarea(tarea) {
 // Cambiar estado de una tarea
 async function cambiarEstado(tareaId) {
     try {
-        const response = await fetch(`${apiUrl}/cambio/${tareaId}`, { method: 'PUT' });
+        const response = await fetch(`${apiUrl}/cambio/${tareaId}`, { method: 'GET' });
         if (!response.ok) throw new Error('Error al cambiar estado');
         await cargarTareas();
     } catch (error) {
