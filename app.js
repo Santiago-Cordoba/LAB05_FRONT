@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:8080/tareas';
+const apiUrl = 'https://apptareas-f5gxfjabgwfxe2ed.canadacentral-01.azurewebsites.net/tareas';
 let currentTareaId = null;
 
 // Obtener todas las tareas cuando cargue la página
@@ -88,7 +88,7 @@ async function crearTarea(tarea) {
 // Cambiar estado de una tarea
 async function cambiarEstado(tareaId) {
     try {
-        const response = await fetch(`${apiUrl}/cambio/${tareaId}`, { method: 'GET' });
+        const response = await fetch(`${apiUrl}/cambio/${tareaId}`, { method: 'PUT' });
         if (!response.ok) throw new Error('Error al cambiar estado');
         await cargarTareas();
     } catch (error) {
