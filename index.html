@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tareas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/AppStyle.css">
 </head>
 <body>
 <div class="container mt-5">
@@ -21,8 +21,9 @@
             <div class="col-md-4">
                 <input class="form-control" type="text" id="taskDescription" placeholder="Descripción" required>
             </div>
-            <div class="col-md-4">
-                <button type="button" class="btn btn-success w-100" id="addTask">Agregar</button>
+            <div class="col-md-4 d-flex justify-content-around">
+                <button type="button" class="btn btn-success me-2" id="addTask">Agregar</button>
+                <a href="analitica.html" class="btn btn-success">Ir a Analítica</a>
             </div>
         </form>
     </div>
@@ -58,8 +59,10 @@
             </div>
         </form>
     </div>
+
+   
 </div>
 
-<script src="app.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
