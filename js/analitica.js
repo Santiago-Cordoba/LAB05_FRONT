@@ -73,27 +73,34 @@ async function mostrarGrafico(tipo) {
                 }
             });
             break;
-
-        case 'tareasFinalizadas':
-            
-            const tareasPorSemana = [0, 0, 0, 0]; 
-
+            case 'tareasFinalizadas':
+    
+            // Inicializa los contadores de tareas para cada rango de duración
+            const tareasPorDuracion = [0, 0, 0, 0]; 
+        
             datos.forEach(tarea => {
-               
-                const semana = tarea.semanaFinalizacion; 
-                if (semana >= 1 && semana <= 4) {
-                    tareasPorSemana[semana - 1]++;
+                const duracion = tarea.tiempoPromedio; // Asumiendo que 'duracion' es la propiedad de duración de la tarea
+                
+                // Clasifica las tareas según su duración
+                if (duracion <= 5) {
+                    tareasPorDuracion[0]++;  // 0-5 días
+                } else if (duracion <= 10) {
+                    tareasPorDuracion[1]++;  // 6-10 días
+                } else if (duracion <= 15) {
+                    tareasPorDuracion[2]++;  // 11-15 días
+                } else {
+                    tareasPorDuracion[3]++;  // Más de 15 días
                 }
             });
-
-            
+        
+            // Configuración del gráfico con rangos de duración
             grafico = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                    labels: ['0-5 días', '6-10 días', '11-15 días', 'Más de 15 días'],  // Etiquetas según la duración
                     datasets: [{
                         label: 'Tareas Finalizadas',
-                        data: tareasPorSemana,
+                        data: tareasPorDuracion,  // Datos basados en la duración
                         fill: false,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         tension: 0.1
@@ -101,6 +108,7 @@ async function mostrarGrafico(tipo) {
                 }
             });
             break;
+        
 
         case 'promediosPrioridad':
             
@@ -133,27 +141,48 @@ async function mostrarGrafico(tipo) {
             });
             break;
 
-        case 'tiempoInvertido':
-            // Obtener el tiempo invertido en cada tarea
-            const tiempoInvertido = datos.map(tarea => tarea.tiempoDesarrollo); // Supongamos que cada tarea tiene un tiempo
-
-            // Crear el gráfico de dona
-            grafico = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: datos.map(tarea => `Tarea ${tarea.id}`), // Usar identificadores de tarea para etiquetas
-                    datasets: [{
-                        label: 'Tiempo Total Invertido',
-                        data: tiempoInvertido,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                        ]
-                    }]
-                }
-            });
-            break;
+            case 'tiempoInvertido':
+                const tareasDificultad = {
+                    alto: 0,
+                    medio: 0,
+                    bajo: 0
+                };
+    
+                datos.forEach(tarea => {
+                    if (tarea.dificultad === 'Alto') {
+                        tareasDificultad.alto+= tarea.tiempoPromedio;
+                    } else if (tarea.dificultad === 'Medio') {
+                        tareasDificultad.medio+= tarea.tiempoPromedio;
+                    } else if (tarea.dificultad === 'Bajo') {
+                        tareasDificultad.bajo+= tarea.tiempoPromedio;
+                    }
+                });
+    
+                
+                grafico = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Alto', 'Medio', 'Bajo'],
+                        datasets: [{
+                            label: 'Número de Tareas',
+                            data: [tareasDificultad.alto, tareasDificultad.medio, tareasDificultad.bajo],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                });
+                break;
+            
+            
 
         default:
             console.error("Tipo de gráfico no soportado");
