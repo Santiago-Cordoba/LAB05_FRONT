@@ -115,26 +115,31 @@ function prepararActualizacion(tareaId, nombre, descripcion) {
     document.getElementById('updateForm').style.display = 'block';
 }
 
-// Actualizar una tarea
-function actualizarTarea(tareaId) {
-    const nombreTarea = prompt('Ingrese el nuevo nombre de la tarea:');
-    const descripcionTarea = prompt('Ingrese la nueva descripción de la tarea:');
+// Ocultar formulario de actualización
+function ocultarFormulario() {
+    document.getElementById('updateForm').style.display = 'none';
+    currentTareaId = null;
+}
 
-    if (nombreTarea && descripcionTarea) {
-        const tareaActualizada = {
-            nombre: nombreTarea,
-            descripcion: descripcionTarea,
-            estado: false
-        };
-
-        fetch(`${apiUrl}/${tareaId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(tareaActualizada)
-        })
-        .then(() => getTareas())
-        .catch(error => console.error('Error:', error));
+// Actualizar tarea
+async function actualizarTarea(tareaId) {
+    const taskName = document.getElementById('updateTaskName').value;
+    const taskDescription = document.getElementById('updateTaskDescription').value;
+    if (taskName && taskDescription) {
+        const tareaActualizada = { nombre: taskName, descripcion: taskDescription, estado: false };
+        try {
+            const response = await fetch(`${apiUrl}/${tareaId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(tareaActualizada)
+            });
+            if (!response.ok) throw new Error('Error al actualizar tarea');
+            await cargarTareas();
+            ocultarFormulario();
+        } catch (error) {
+            console.error('Error al actualizar tarea:', error);
+        }
+    } else {
+        alert('Por favor, completa ambos campos.');
     }
 }
